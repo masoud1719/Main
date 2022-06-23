@@ -177,7 +177,7 @@ namespace testmna
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // change by vahidd
+            // change by vahidd mirzaie
             getValues();
             for (int i = 0; i < iteration; i++)
             {
