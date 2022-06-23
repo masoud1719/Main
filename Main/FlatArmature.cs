@@ -70,17 +70,73 @@ namespace testmna
 
         private double nextIterVal;
 
+        private double pho2;
+
+        private double h;
+
+        private double dc;
+
         private double r1;
+
         private double r2;
+
+        private double r3;
+
+        private double t1;
+
+        private double t2;
+
+        private double d;
+
+        private double di;
+
+        private double NetheightOfCoil;
+
+        private double Numberofroundsperlayer;
+
+        private double NetDepthOfCoil;
+
+        private double NumberOfLayer;
+
+        private double N;
+
+        private double az;
+
+        private double lmt;
+
+        private double R;
+
+        private double I;
+
+        private double P;
+
+        private double TotalMMF;
+
+
+
+
+
+
+
+
+
+
 
         public FlatArmature( double force, double stroke,bool isMass)
         {
+
             InitializeComponent();
+
             isNeuton = !isMass;
+
             force *= isMass ? 1 : 9.81;
+
             txtForce.Text = Convert.ToString(force);
+
             txtStroke.Text = Convert.ToString(stroke);
+
             comboBox1.SelectedIndex = isMass ? 0 : 1;
+
             creteSWGInsulations();
             cretwAWGInsulation();
         }
@@ -93,18 +149,33 @@ namespace testmna
             }
 
             awgInsulations.Add(0.4);
+
             awgInsulations.Add(0.4);
+
             awgInsulations.Add(0.4);
+
             awgInsulations.Add(0.35);
+
             awgInsulations.Add(0.35);
+
             awgInsulations.Add(0.35);
+
             awgInsulations.Add(0.35);
+
             awgInsulations.Add(0.3);
+
             awgInsulations.Add(0.3);
+
             awgInsulations.Add(0.3);
+
             awgInsulations.Add(0.3);
+
             awgInsulations.Add(0.3);
+
             awgInsulations.Add(0.3);
+
+
+
             for (int i =23; i < 37; i++)
             {
                 awgInsulations.Add(0.25);
@@ -124,36 +195,62 @@ namespace testmna
                     swgInsulations.Add(0.074);
 
             }
+
             swgInsulations.Add(0.075);
+
             swgInsulations.Add(0.075);
+
             swgInsulations.Add(0.075);
+
             swgInsulations.Add(0.263);
+
             swgInsulations.Add(0.263);
+
             swgInsulations.Add(0.05);
+
             swgInsulations.Add(0.05);
+
             swgInsulations.Add(0.038);
+
             swgInsulations.Add(0.038);
+
             swgInsulations.Add(0.038);
+
             swgInsulations.Add(0.038);
+
             swgInsulations.Add(0.033);
+
             swgInsulations.Add(0.033);
+
             swgInsulations.Add(0.033);
+
             swgInsulations.Add(0.025);
+
             swgInsulations.Add(0.025);
+
             swgInsulations.Add(0.025);
+
             swgInsulations.Add(0.025);
+
             swgInsulations.Add(0.018);
+
             swgInsulations.Add(0.018);
+
             swgInsulations.Add(0.018);
+
             swgInsulations.Add(0.018);
+
             swgInsulations.Add(0.018);
+
             swgInsulations.Add(0.013);
+
             swgInsulations.Add(0.013);
         }
 
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
             chkDutyCycle.SelectedIndex = 0;
             wireGauge.SelectedIndex = 0;
         }
@@ -225,7 +322,7 @@ namespace testmna
                 double pho = 2.1e-6;
                 double RT1 = 234.5 + temperature;
                 double RT2 = 234.5 + (temperature + ambientTemperature);
-                double pho2 = pho / (RT1 / RT2);
+                pho2 = pho / (RT1 / RT2);
 
 
 
@@ -236,9 +333,12 @@ namespace testmna
 
 
 
+
                 // h^2 ( r2 - r1 )
                 // validatio ssf (0.5 - 0.7)  0.5 -> >100   0.7 -> <100
+
                 double vahidValue = (dutyCycle * pho2 * Math.Pow(mmf, 2)) / (2 * lambda * ssf * temperature);
+
                 if (!rdbfixTheFactor.Checked)
                 {
                     heightToDepthRatio = nextIterVal == 0 ? heightToDepthRatio : heightToDepthRatio + nextIterVal;
@@ -246,30 +346,31 @@ namespace testmna
 
 
                 // r2 -r1 =dc
-                double dc = Math.Pow(vahidValue / (heightToDepthRatio * heightToDepthRatio), (double)1 / 3);
+                dc = Math.Pow(vahidValue / (heightToDepthRatio * heightToDepthRatio), (double)1 / 3);
 
 
                 r2 = dc + r1;
 
 
                 // h/ (r2-r1 ) = heightToDepthRatio
-                double h = heightToDepthRatio * dc;
+                h = heightToDepthRatio * dc;
 
 
 
                 // r3 = sqrt (r1^2 +r2 ^2 ) 
-                double r3 = Math.Sqrt(Math.Pow(r1, 2) + Math.Pow(r2, 2));
+                r3 = Math.Sqrt(Math.Pow(r1, 2) + Math.Pow(r2, 2));
 
 
 
-                double t1 = r1 / 2;
+                t1 = r1 / 2;
 
 
 
-                double t2 = Math.Pow(r1,2) / (2 * r2);
+                t2 = Math.Pow(r1,2) / (2 * r2);
 
 
-                double d = Math.Sqrt((4 * pho2 * (r1 + r2) * mmf) / voltage);
+                d = Math.Sqrt((4 * pho2 * (r1 + r2) * mmf) / voltage);
+
                 double fileD;
                 if (wireGauge.SelectedIndex == 0)
                 {
@@ -283,56 +384,61 @@ namespace testmna
                     fileD = getDFromFile(@"Resources\\BWG.txt",d);
                 }
 
+
+
                 double plus = 0.2;
                 if (wireGauge.SelectedIndex == 0 || wireGauge.SelectedIndex == 1)
                 {
                     plus = swgInsulations[SWGAWGBWGIndex];
                 }
             
-                double di = (fileD * 10) + plus;
+                di = (fileD * 10) + plus;
 
 
 
-                double NetheightOfCoil = h - ((Topcompressboardinsulation + Bottomcompressboardinsulation + Allowance) * Math.Pow(10, -1));
-                int Numberofroundsperlayer = (int)(NetheightOfCoil / (di / 10));
+                NetheightOfCoil = h - ((Topcompressboardinsulation + Bottomcompressboardinsulation + Allowance) * Math.Pow(10, -1));
+
+
+
+                Numberofroundsperlayer = (int)(NetheightOfCoil / (di / 10));
 
 
 
                 // TODO rename callaf
-                double NetDepthOfCoil = dc - ((Spoolthickness + Insulationbetweencoilandspool + Externalinsulation) * Math.Pow(10, -1));
+                NetDepthOfCoil = dc - ((Spoolthickness + Insulationbetweencoilandspool + Externalinsulation) * Math.Pow(10, -1));
 
 
 
-                int NumberOfLayer = (int)(NetDepthOfCoil / (di / 10));
+                NumberOfLayer = (int)(NetDepthOfCoil / (di / 10));
 
 
 
-                double N = Numberofroundsperlayer * NumberOfLayer;
+                N = Numberofroundsperlayer * NumberOfLayer;
 
 
 
-                double az = (Math.PI / 4) * Math.Pow(d, 2);
+                az = (Math.PI / 4) * Math.Pow(d, 2);
 
 
 
-                double lmt = Math.PI * (r1 + r2);
+                lmt = Math.PI * (r1 + r2);
 
 
                 // Resistance
-                double R = (pho2 * lmt * N) / az;
+                R = (pho2 * lmt * N) / az;
 
 
                 // current
-                double I = voltage / R;
+                I = voltage / R;
 
 
 
                 //  talafat
-                double P = R * Math.Pow(I, 2);
+                P = R * Math.Pow(I, 2);
 
 
 
-                double TotalMMF = N * I;
+                TotalMMF = N * I;
                 double error = ((TotalMMF - mmf) / mmf) * 100;
                 if (error < accurcy)
                 {
@@ -359,8 +465,46 @@ namespace testmna
                 }
             }
 
-            dataGridView3.Rows.Add("R1", "cm", string.Format("{0:0.0000}", r1));
-            dataGridView3.Rows.Add("R2", "cm", string.Format("{0:0.0000}", r2));
+            dataGridView3.Rows.Add("pho2", "ohm_cm", string.Format("{0:0.00000000}", pho2));
+
+            dataGridView3.Rows.Add("h", "cm", string.Format("{0:0.0000}", h));
+
+            dataGridView3.Rows.Add("dc", "cm", string.Format("{0:0.0000}", dc));
+
+            dataGridView3.Rows.Add("r1", "cm", string.Format("{0:0.0000}", r1));
+
+            dataGridView3.Rows.Add("r2", "cm", string.Format("{0:0.0000}", r2));
+
+            dataGridView3.Rows.Add("r3", "cm", string.Format("{0:0.0000}", r3));
+
+            dataGridView3.Rows.Add("t1", "cm", string.Format("{0:0.0000}", t1));
+
+            dataGridView3.Rows.Add("t2", "cm", string.Format("{0:0.0000}", t2));
+
+            dataGridView3.Rows.Add("d", "cm", string.Format("{0:0.0000}", d));
+
+            dataGridView3.Rows.Add("di", "cm", string.Format("{0:0.0000}", di));
+
+            dataGridView3.Rows.Add("NetheightOfCoil", "", string.Format("{0:0.0000}", NetheightOfCoil));
+
+            dataGridView3.Rows.Add("Numberofroundsperlayer", "", string.Format("{0:0.0000}", Numberofroundsperlayer));
+
+            dataGridView3.Rows.Add("NetDepthOfCoil", "", string.Format("{0:0.0000}", NetDepthOfCoil));
+
+            dataGridView3.Rows.Add("NumberOfLayer", "", string.Format("{0:0.0000}", NumberOfLayer));
+
+            dataGridView3.Rows.Add("N", "", string.Format("{0:0.0000}", N));
+
+            dataGridView3.Rows.Add("az", "cm^2", string.Format("{0:0.0000}", az));
+
+            dataGridView3.Rows.Add("lmt", "cm", string.Format("{0:0.0000}", lmt));
+
+            dataGridView3.Rows.Add("R", "ohm", string.Format("{0:0.0000}", R));
+
+            dataGridView3.Rows.Add("I", "Amper", string.Format("{0:0.0000}", I));
+
+            dataGridView3.Rows.Add("TotalMMF", "A", string.Format("{0:0.0000}", TotalMMF));
+            
 
         }
 
@@ -424,7 +568,9 @@ namespace testmna
                 Insulationbetweencoilandspool = Double.Parse(text_5.Text);
 
                 Externalinsulation = Double.Parse(txtExternalInsulution.Text);
+
                 accurcy = Double.Parse(txtaccuracy.Text);
+
                 iteration = Convert.ToInt32(txtmaximumIteration.Text);
         }
 
