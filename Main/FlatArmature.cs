@@ -505,7 +505,7 @@ namespace testmna
 
             dataGridView3.Rows.Add("TotalMMF", "A", string.Format("{0:0.0000}", TotalMMF));
             
-
+            //cvn
         }
 
         private double getDFromFile(string filePath, double value)
